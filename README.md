@@ -7,33 +7,33 @@ speech from an audio file.
 ## Usage
 
 * To install mlhub (Ubuntu 23.10 LTS)
-  ```console
-  $ pip3 install mlhub
-  $ ml configure
+  ```bash
+  pip3 install mlhub
+  ml configure
   ```
 
 * To install and configure the package
-  ```console
-  $ ml install gjwgit/openai@main
-  $ ml configure openai
-  $ ml readme openai
-  $ ml commands openai
+  ```bash
+  ml install gjwgit/openai@main
+  ml configure openai
+  ml readme openai
+  ml commands openai
   ```
 * Command line tools
-  ```console
-  $ ml transcribe openai myspeech.wav
+  ```bash
+  ml transcribe openai myspeech.wav
   ```
 
 * Quick test
 
-  ```console
+  ```bash
   wget https://github.com/realpython/python-speech-recognition/raw/master/audio_files/harvard.wav
   ml transcribe openai harvard.wav
   ```
 
 to see
 
-  ```
+  ```console
   The stale smell of old beer lingers. 
   It takes heat to bring out the odor. 
   A cold dip restores health and zest. 
