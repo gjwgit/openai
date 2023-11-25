@@ -1,0 +1,21 @@
+--- # This is a comment and otherwise ignored.
+meta:
+  name         : openai
+  title        : Open AI packages, including whisper for speech transcription
+  keywords     : python, speech, transcription
+  version      : 0.0.1
+  languages    : py
+  license      : gpl3
+  author       : Graham.Williams@togaware.com
+  url          : https://github.com/gjwgit/openai
+dependencies:
+  system:
+    - ffmpeg
+  pip3:
+    - openai-whisper
+  files:
+    - README.md
+    - transcribe.py
+    - configure.sh
+commands:
+  transcribe : Convert an audio file into text.
