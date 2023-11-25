@@ -1,1 +1,1 @@
-echo "No figure required just yet."
+echo "No configure required just yet."
