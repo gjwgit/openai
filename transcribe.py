@@ -2,7 +2,7 @@
 #
 # MLHub toolket for OpenAI - Transcribe
 #
-# Time-stamp: <Saturday 2023-11-25 15:28:11 +1100 Graham Williams>
+# Time-stamp: <Saturday 2023-11-25 15:47:39 +1100 Graham Williams>
 #
 # Author: Graham.Williams@togaware.com
 # Licensed under GPLv3.
@@ -63,7 +63,7 @@ result is returned as text.
     if not os.path.exists(path):
         sys.exit(f"openai transcribe: File not found: {path}")
         
-    result = model.transcribe("harvard.wav", fp16=False) # fp16 not supported on CPU
+    result = model.transcribe(path, fp16=False) # fp16 not supported on CPU
     print(result["text"])
 
 if __name__ == "__main__":
