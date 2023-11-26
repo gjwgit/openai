@@ -2,7 +2,7 @@
 #
 # MLHub toolket for OpenAI - Transcribe
 #
-# Time-stamp: <Saturday 2023-11-25 15:47:39 +1100 Graham Williams>
+# Time-stamp: <Sunday 2023-11-26 14:06:57 +1100 Graham Williams>
 #
 # Author: Graham.Williams@togaware.com
 # Licensed under GPLv3.
@@ -44,6 +44,8 @@ The audio is processed locally using a downlaoded OpenAI model The
 result is returned as text.
 
     """
+    pkg = "openai"
+    cmd = "transcribe"
 
     # -----------------------------------------------------------------------
     # Load the required model. Just small for now.
@@ -56,15 +58,16 @@ result is returned as text.
     # -----------------------------------------------------------------------
 
     if not filename:
-        sys.exit(f"openai transcribe: A filename is required.")
+        sys.exit(f"{pkg} {cmd}: A filename is required.")
         
     path = os.path.join(get_cmd_cwd(), filename)
 
     if not os.path.exists(path):
-        sys.exit(f"openai transcribe: File not found: {path}")
+        sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
     result = model.transcribe(path, fp16=False) # fp16 not supported on CPU
-    print(result["text"])
+
+    print(result["text"].strip())
 
 if __name__ == "__main__":
     cli(prog_name="transcribe")
