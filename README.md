@@ -22,6 +22,7 @@ speech from an audio file.
 * Command line tools
   ```bash
   ml transcribe openai myspeech.wav
+  ml translate openai myspeech.wav
   ```
 
 * Quick test
@@ -41,3 +42,23 @@ to see
   Tacos al pastor are my favorite. 
   A zestful food is the hot cross bun.
   ```
+
+## Options
+
+* `-l`, `--lang`: Specify the language of the source audio to speed up the transcribe/translate process.  
+For example, to transcribe audio in English, use `-l en`.  
+See [tokenizer.py](https://github.com/openai/whisper/blob/main/whisper/tokenizer.py) for the list of all available languages.
+
+* `-o`, `--output`: Specify the output file name and format.  
+For example, `-o output.txt` will save the transcribed text to a file named `output.txt` in the same directory.
+
+Format:  
+`ml transcribe openai [FILENAME] [-l LANGUAGE] [-o OUTPUT_FILE]`  
+`ml translate openai [FILENAME] [-l LANGUAGE] [-o OUTPUT_FILE]`
+
+Examples:
+```bash
+ml transcribe openai myspeech.wav -l en -o output.txt
+ml translate openai myspeech.wav -l en -o output.txt
+```
+
