@@ -17,5 +17,7 @@ dependencies:
     - README.md
     - transcribe.py
     - configure.sh
+    - translate.py
 commands:
   transcribe : Convert an audio file into text.
+  translate  : Translate audio from a file into English text.
