@@ -45,8 +45,8 @@ to see
 
 ## Options
 
-* `-l`, `--lang`: Specify the language of the source audio to speed up the transcribe/translate process.  
-For example, to transcribe audio in English, use `-l en`.  
+* `-l`, `--lang`: Specify the language of the source audio.  
+This will speed up the transcribe/translate process.  
 See [tokenizer.py](https://github.com/openai/whisper/blob/main/whisper/tokenizer.py) for the list of all available languages.
 
 * `-o`, `--output`: Specify the output file name and format.  
