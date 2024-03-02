@@ -42,10 +42,15 @@ from mlhub.pkg import get_cmd_cwd
 def cli(filename, lang, output):
     """Translate audio from a file into English.
 
-Tested with wav, mp4.
+Tested with wav, mp4, mov.
 
 The audio is processed locally using a downloaded OpenAI model. The
 result is returned as text.
+
+Use the `-l` or `--lang` option to specify the language of the source audio.
+
+To save the translated text to a file, use the `-o` or `--output` option to 
+specify the desired output file name and format (e.g. `output.txt`).
 
     """
 
@@ -74,10 +79,11 @@ result is returned as text.
     text = result["text"].strip()
 
     if output:
-        with open(output, "w") as f:
+        output_path = os.path.join(os.getcwd(), output)
+        with open(output_path, "w") as f:
             f.write(text)
-    else:
-        print(text)
+    
+    print(text)
     
 if __name__ == "__main__":
     cli(prog_name="translate")
