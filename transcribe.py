@@ -66,7 +66,7 @@ result is returned as text.
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
     # fp16 not supported on CPU
-    result = model.transcribe(path, fp16=False, language=lang)
+    result = model.transcribe(path, fp16=False, language=lang, verbose=True)
 
     print(result["text"].strip())
 

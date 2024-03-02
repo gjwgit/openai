@@ -66,7 +66,7 @@ result is returned as text.
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
-    result = model.transcribe(path, fp16=False, task="translate", language=lang)
+    result = model.transcribe(path, fp16=False, task="translate", language=lang, verbose=True)
 
     print(result["text"])
     
