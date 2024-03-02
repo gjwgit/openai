@@ -34,8 +34,12 @@ from mlhub.pkg import get_cmd_cwd
               default=None,
               type=click.STRING,
               help="The language of the source audio.")
+@click.option("-o", "--output",
+              default=None,
+              type=click.STRING,
+              help="Output file name and format. e.g. output.txt, output.json")
 
-def cli(filename, lang):
+def cli(filename, lang, output):
     """Transcribe audio from a file.
 
 Tested with wav, mp4.
@@ -66,9 +70,14 @@ result is returned as text.
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
     # fp16 not supported on CPU
-    result = model.transcribe(path, fp16=False, language=lang, verbose=True)
+    result = model.transcribe(path, fp16=False, language=lang)
+    text = result["text"].strip()
 
-    print(result["text"].strip())
+    if output:
+        with open(output, "w") as f:
+            f.write(text)
+    else:
+        print(text)
 
 if __name__ == "__main__":
     cli(prog_name="transcribe")

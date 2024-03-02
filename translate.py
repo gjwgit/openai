@@ -34,8 +34,12 @@ from mlhub.pkg import get_cmd_cwd
               default=None,
               type=click.STRING,
               help="The language of the source audio (auto).")
+@click.option("-o", "--output",
+              default=None,
+              type=click.STRING,
+              help="Output file name and format. e.g. output.txt, output.json")
 
-def cli(filename, lang):
+def cli(filename, lang, output):
     """Translate audio from a file into English.
 
 Tested with wav, mp4.
@@ -66,9 +70,14 @@ result is returned as text.
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
-    result = model.transcribe(path, fp16=False, task="translate", language=lang, verbose=True)
+    result = model.transcribe(path, fp16=False, task="translate", language=lang)
+    text = result["text"].strip()
 
-    print(result["text"])
+    if output:
+        with open(output, "w") as f:
+            f.write(text)
+    else:
+        print(text)
     
 if __name__ == "__main__":
     cli(prog_name="translate")
