@@ -40,7 +40,7 @@ def cli(filename, lang):
 
 Tested with wav, mp4.
 
-The audio is processed locally using a downlaoded OpenAI model. The
+The audio is processed locally using a downloaded OpenAI model. The
 result is returned as text.
 
     """
@@ -66,7 +66,7 @@ result is returned as text.
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
-    result = model.transcribe(path, fp16=False, task="translate")
+    result = model.transcribe(path, fp16=False, task="translate", language=lang)
 
     print(result["text"])
     
