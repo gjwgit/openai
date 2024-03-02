@@ -79,7 +79,7 @@ specify the desired output file name and format (e.g. `output.txt`).
     text = result["text"].strip()
 
     if output:
-        output_path = os.path.join(os.getcwd(), output)
+        output_path = os.path.join(get_cmd_cwd(), output)
         with open(output_path, "w") as f:
             f.write(text)
     
