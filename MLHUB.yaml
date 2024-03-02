@@ -20,4 +20,4 @@ dependencies:
     - translate.py
 commands:
   transcribe : Convert an audio file into text.
-  translate  : Translate audio from a file into English text.
+  translate : Translate audio from a file into English text.
