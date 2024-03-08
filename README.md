@@ -1,8 +1,9 @@
 # An MLHub package for OpenAI
 
 This [MLHUB](https://mlhub.ai/) package provides a command line tool
-from [whispher](https://github.com/openai/whisper) for transcribing
-speech from an audio file. 
+based on [whispher](https://github.com/openai/whisper) for
+transcribing speech from an audio file. See the [MLHub Desktop
+Survival Guide](https://survivor.togaware.com/mlhub/openai.html) for details.
 
 ## Usage
 
