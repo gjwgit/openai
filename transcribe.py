@@ -82,8 +82,9 @@ specify the desired output file name and format (e.g. `output.txt`).
         output_path = os.path.join(get_cmd_cwd(), output)
         with open(output_path, "w") as f:
             f.write(text)
-    
-    print(text)
+        print("Transcribed text saved to", output_path)
+    else:
+        print(text)
 
 if __name__ == "__main__":
     cli(prog_name="transcribe")
