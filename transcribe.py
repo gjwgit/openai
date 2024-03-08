@@ -34,14 +34,23 @@ from mlhub.pkg import get_cmd_cwd
               default=None,
               type=click.STRING,
               help="The language of the source audio.")
+@click.option("-o", "--output",
+              default=None,
+              type=click.STRING,
+              help="Output file name and format. e.g. output.txt, output.json")
 
-def cli(filename, lang):
+def cli(filename, lang, output):
     """Transcribe audio from a file.
 
-Tested with wav, mp4.
+Tested with wav, mp4, mov.
 
-The audio is processed locally using a downlaoded OpenAI model The
+The audio is processed locally using a downloaded OpenAI model The
 result is returned as text.
+
+Use the `-l` or `--lang` option to specify the language of the source audio.
+
+To save the transcribed text to a file, use the `-o` or `--output` option to 
+specify the desired output file name and format (e.g. `output.txt`).
 
     """
     pkg = "openai"
@@ -65,9 +74,17 @@ result is returned as text.
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
-    result = model.transcribe(path, fp16=False) # fp16 not supported on CPU
+    # fp16 not supported on CPU
+    result = model.transcribe(path, fp16=False, language=lang)
+    text = result["text"].strip()
 
-    print(result["text"].strip())
+    if output:
+        output_path = os.path.join(get_cmd_cwd(), output)
+        with open(output_path, "w") as f:
+            f.write(text)
+        print("Transcribed text saved to", output_path)
+    else:
+        print(text)
 
 if __name__ == "__main__":
     cli(prog_name="transcribe")
