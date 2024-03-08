@@ -37,9 +37,13 @@ from mlhub.pkg import get_cmd_cwd
 @click.option("-o", "--output",
               default=None,
               type=click.STRING,
-              help="Output file name and format. e.g. output.txt, output.json")
+              help="The name and format of the output file. e.g. output.txt")
+@click.option("-f", "--format",
+              default=None,
+              type=click.STRING,
+              help="The format of the output file. e.g. txt, json, srt")
 
-def cli(filename, lang, output):
+def cli(filename, lang, output, format):
     """Translate audio from a file into English.
 
 Tested with wav, mp4, mov.
@@ -49,8 +53,11 @@ result is returned as text.
 
 Use the `-l` or `--lang` option to specify the language of the source audio.
 
-To save the translated text to a file, use the `-o` or `--output` option to 
-specify the desired output file name and format (e.g. `output.txt`).
+To save the translated text to a file, 
+use the `-o` or `--output` option to specify the desired output file name and 
+format (e.g. `output.txt`), 
+or use the `-f` or `--format` option to specify the desired output file format
+(e.g. `txt`) while the file name will be the same as input audio file name.
 
     """
 
@@ -78,8 +85,12 @@ specify the desired output file name and format (e.g. `output.txt`).
     result = model.transcribe(path, fp16=False, task="translate", language=lang)
     text = result["text"].strip()
 
-    if output:
-        output_path = os.path.join(get_cmd_cwd(), output)
+    if output or format:
+        output_path = (
+            os.path.join(get_cmd_cwd(), output) if output 
+            else os.path.join(get_cmd_cwd(), 
+                              filename.replace(filename.split(".")[-1], format))
+        )
         with open(output_path, "w") as f:
             f.write(text)
         print("Translated text saved to", output_path)
