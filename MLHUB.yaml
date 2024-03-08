@@ -18,6 +18,8 @@ dependencies:
     - configure.sh
     - transcribe.py
     - translate.py
+    - identify.py
 commands:
   transcribe : Convert an audio file into text.
   translate : Translate audio from a file into English text.
+  identify: Identify the language of the audio file.
