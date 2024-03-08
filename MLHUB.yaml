@@ -15,8 +15,8 @@ dependencies:
     - openai-whisper
   files:
     - README.md
-    - transcribe.py
     - configure.sh
+    - transcribe.py
     - translate.py
 commands:
   transcribe : Convert an audio file into text.
