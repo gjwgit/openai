@@ -84,7 +84,7 @@ def cli(filename, lang, output, format):
         
     # fp16 not supported on CPU
     result = model.transcribe(path, fp16=False, language=lang)
-    text = result["text"].strip()
+    text = result["text"]
 
     if output or format:
         output_path = (
