@@ -84,7 +84,6 @@ def cli(filename, lang, output, format):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
     result = model.transcribe(path, fp16=False, task="translate", language=lang)
-    text = result["text"].strip()
 
     if output or format:
         output_path = (
@@ -93,10 +92,13 @@ def cli(filename, lang, output, format):
                               filename.replace(filename.split(".")[-1], format))
         )
         with open(output_path, "w") as f:
-            f.write(text)
+            # Split the text into sentences, one sentence per line.
+            for segment in result["segments"]:
+                f.write(segment["text"].strip() + "\n")
         print("Translated text saved to", output_path)
     else:
-        print(text)
+        for segment in result["segments"]:
+            print(segment["text"].strip())
     
 if __name__ == "__main__":
     cli(prog_name="translate")

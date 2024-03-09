@@ -92,6 +92,7 @@ def cli(filename, lang, output, format):
                               filename.replace(filename.split(".")[-1], format))
         )
         with open(output_path, "w") as f:
+            # Split the text into sentences, one sentence per line.
             for segment in result["segments"]:
                 f.write(segment["text"].strip() + "\n")
         print("Transcribed text saved to", output_path)
