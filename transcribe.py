@@ -84,7 +84,6 @@ def cli(filename, lang, output, format):
         
     # fp16 not supported on CPU
     result = model.transcribe(path, fp16=False, language=lang)
-    text = result["text"]
 
     if output or format:
         output_path = (
@@ -93,10 +92,12 @@ def cli(filename, lang, output, format):
                               filename.replace(filename.split(".")[-1], format))
         )
         with open(output_path, "w") as f:
-            f.write(text)
+            for segment in result["segments"]:
+                f.write(segment["text"].strip() + "\n")
         print("Transcribed text saved to", output_path)
     else:
-        print(text)
+        for segment in result["segments"]:
+            print(segment["text"].strip())
 
 if __name__ == "__main__":
     cli(prog_name="transcribe")
