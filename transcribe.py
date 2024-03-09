@@ -44,20 +44,21 @@ from mlhub.pkg import get_cmd_cwd
               help="The format of the output file. e.g. txt, json, srt")
 
 def cli(filename, lang, output, format):
-    """Transcribe audio from a file.
+    """
+    Transcribe audio from a file.
 
-Tested with wav, mp4, mov.
+    Tested with wav, mp4, mov.
 
-The audio is processed locally using a downloaded OpenAI model The
-result is returned as text.
+    The audio is processed locally using a downloaded OpenAI model The
+    result is returned as text.
 
-Use the `-l` or `--lang` option to specify the language of the source audio.
+    Use the `-l` or `--lang` option to specify the language of the source audio.
 
-To save the transcribed text to a file, 
-use the `-o` or `--output` option to specify the desired output file name and 
-format (e.g. `output.txt`), 
-or use the `-f` or `--format` option to specify the desired output file format
-(e.g. `txt`) while the file name will be the same as input audio file name.
+    To save the transcribed text to a file, 
+    use the `-o` or `--output` option to specify the desired output file name and 
+    format (e.g. `output.txt`), 
+    or use the `-f` or `--format` option to specify the desired output file format
+    (e.g. `txt`) while the file name will be the same as input audio file name.
 
     """
     pkg = "openai"

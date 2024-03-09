@@ -140,10 +140,13 @@ LANGUAGES = {
                 type=click.STRING)
 
 def cli(filename):
-    """Identify the language of a media file.
+    """
+    Identify the language of a media file.
 
-The audio is processed locally using a downloaded OpenAI model. The
-result is returned as text.
+    Tested with wav, mp3, mov.
+
+    The audio is processed locally using a downloaded OpenAI model. The
+    result is returned as text.
 
     """
 
