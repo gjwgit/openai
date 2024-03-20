@@ -4,7 +4,7 @@
 #
 # Time-stamp: <Sunday 2023-11-26 14:06:57 +1100 Graham Williams>
 #
-# Author: Graham.Williams@togaware.com
+# Author: Graham.Williams@togaware.com, Ting Tang
 # Licensed under GPLv3.
 # Copyright (c) Togaware Pty Ltd. All rights reserved.
 #
@@ -91,14 +91,24 @@ def cli(filename, lang, output, format):
             else os.path.join(get_cmd_cwd(), 
                               filename.replace(filename.split(".")[-1], format))
         )
-        with open(output_path, "w") as f:
-            # Split the text into sentences, one sentence per line.
-            for segment in result["segments"]:
-                f.write(segment["text"].strip() + "\n")
-        print("Transcribed text saved to", output_path)
-    else:
-        for segment in result["segments"]:
-            print(segment["text"].strip())
+    
+    text_buffer = [] # Buffer for accumulating segments of one sentence.
+
+    # Process and output the text ensuring one sentence per line.
+    for segment in result["segments"]:
+        text_buffer.append(segment["text"].strip())
+        
+        if segment["text"].strip()[-1] in [".", "?", "!", "。", "？", "！"]:
+            # Reached the end of a sentence.
+            full_sentence = " ".join(text_buffer)
+            
+            if output or format:
+                with open(output_path, "a") as f:
+                    f.write(full_sentence + "\n")
+            else:
+                print(full_sentence)
+            
+            text_buffer = []  # Clear the buffer after outputting.
 
 if __name__ == "__main__":
     cli(prog_name="transcribe")

@@ -4,7 +4,7 @@
 #
 # Time-stamp:
 #
-# Author:
+# Author: Ting Tang
 # Licensed under GPLv3.
 # Copyright (c) Togaware Pty Ltd. All rights reserved.
 #
