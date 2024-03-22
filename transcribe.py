@@ -98,7 +98,11 @@ def cli(filename, lang, output, format):
         print("Transcribed text saved to", output_path)
     else:
         for segment in result["segments"]:
-            print(segment["text"])
+            for segment in result["segments"]:
+                print("Segment details:")
+                for key, value in segment.items():
+                    print(f"{key}: {value}")
+                print("-" * 50)  # Just a separator for readability
 
     # if output or format:
     #     output_path = (
