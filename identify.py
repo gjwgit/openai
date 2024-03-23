@@ -171,10 +171,13 @@ def cli(filename):
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
-    result = model.transcribe(path, fp16=False)
-    language_code = result["language"].strip()
-    language = language_code + "," + LANGUAGES[language_code].title()
-    print(language)
+    audio = whisper.load_audio(path)
+    
+    # make log-Mel spectrogram and move to the same device as the model
+    mel = whisper.log_mel_spectrogram(audio).to(model.device)
+
+    _, probs = model.detect_language(mel)
+    print(max(probs, key=probs.get))
     
 if __name__ == "__main__":
     cli(prog_name="identify")
