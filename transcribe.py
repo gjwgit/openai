@@ -119,7 +119,7 @@ def cli(filename, lang, output, format):
         else:
             print(trailing_text)
     
-    if output and format:
+    if output or format:
         print("Transcribed text saved to", output_path)
 
 if __name__ == "__main__":
