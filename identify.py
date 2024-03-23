@@ -171,8 +171,10 @@ def cli(filename):
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
         
+    # load audio and pad/trim it to fit 30 seconds
     audio = whisper.load_audio(path)
-    
+    audio = whisper.pad_or_trim(audio)
+
     # make log-Mel spectrogram and move to the same device as the model
     mel = whisper.log_mel_spectrogram(audio).to(model.device)
 
