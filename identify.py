@@ -179,7 +179,9 @@ def cli(filename):
     mel = whisper.log_mel_spectrogram(audio).to(model.device)
 
     _, probs = model.detect_language(mel)
-    print(max(probs, key=probs.get))
+    language_code = max(probs, key=probs.get)
+    language = language_code + "," + LANGUAGES[language_code].title()
+    print(language)
     
 if __name__ == "__main__":
     cli(prog_name="identify")
