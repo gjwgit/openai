@@ -116,9 +116,11 @@ def cli(filename, lang, output, format):
         if output or format:
             with open(output_path, "a", encoding="utf-8") as f:
                 f.write(trailing_text + "\n")
-            print("Translated text saved to", output_path)
         else:
             print(trailing_text)
+
+    if output and format:
+        print("Translated text saved to", output_path)
     
 if __name__ == "__main__":
     cli(prog_name="translate")
