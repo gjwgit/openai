@@ -34,14 +34,14 @@ from mlhub.pkg import get_cmd_cwd
               default=None,
               type=click.STRING,
               help="The language of the source audio.")
-@click.option("-o", "--output",
-              default=None,
-              type=click.STRING,
-              help="The name and format of the output file. e.g. output.txt")
 @click.option("-f", "--format",
               default=None,
               type=click.STRING,
               help="The format of the output file. e.g. txt, json, srt")
+@click.option("-o", "--output",
+              default=None,
+              type=click.STRING,
+              help="The name and format of the output file. e.g. output.txt")
 
 def cli(filename, lang, output, format):
     """

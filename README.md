@@ -22,6 +22,7 @@ Survival Guide](https://survivor.togaware.com/mlhub/openai.html) for details.
   ```
 * Command line tools
   ```bash
+  ml identify openai myspeech.wav
   ml transcribe openai myspeech.wav
   ml translate openai myspeech.wav
   ```
@@ -48,18 +49,26 @@ to see
 
 * `-l`, `--lang`: Specify the language of the source audio.  
 This will speed up the transcribe/translate process.  
-See [tokenizer.py](https://github.com/openai/whisper/blob/main/whisper/tokenizer.py) for the list of all available languages.
+See [tokenizer.py](https://github.com/openai/whisper/blob/main/whisper/tokenizer.py) 
+for the list of all available languages.
+
+* `-f`, `--format`: Specify the output file format.   
+For example, `-f txt` will save the output text to a file with the same filename 
+as the source audio and in the txt format in the same directory.
 
 * `-o`, `--output`: Specify the output file name and format.  
-For example, `-o output.txt` will save the transcribed text to a file named `output.txt` in the same directory.
+For example, `-o output.txt` will save the output text to a file named 
+`output.txt` in the same directory.
+
+*Without '-f' or '-o', then by default, the output text will be printed out in the terminal.*
 
 Format:  
-`ml transcribe openai [FILENAME] [-l LANGUAGE] [-o OUTPUT_FILE]`  
-`ml translate openai [FILENAME] [-l LANGUAGE] [-o OUTPUT_FILE]`
+`ml transcribe openai [-l LANGUAGE] [-f OUTPUT_FILE_FORMAT] [FILENAME]`  
+`ml translate openai [-l LANGUAGE] [-o OUTPUT_FILE] [FILENAME]`
 
 Examples:
 ```bash
-ml transcribe openai myspeech.wav -l en -o output.txt
-ml translate openai myspeech.wav -l en -o output.txt
+ml transcribe openai -l en -f txt myspeech.wav 
+ml translate openai --output jokowi.srt --lang id jokowi.wav
 ```
 
