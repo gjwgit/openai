@@ -72,7 +72,7 @@ def cli(filename, lang, output, format):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
 
     # Define the command we want to run using Whisper
-    command = "whisper" + filename + "--model small"
+    command = "whisper " + filename + " --model small"
 
     # Use os.system to execute the command
     status = os.system(command)
