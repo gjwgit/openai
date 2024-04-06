@@ -2,7 +2,7 @@
 #
 # MLHub toolket for OpenAI - Transcribe
 #
-# Time-stamp: <Sunday 2023-11-26 14:06:57 +1100 Graham Williams>
+# Time-stamp: 
 #
 # Author: Graham.Williams@togaware.com, Ting Tang
 # Licensed under GPLv3.
@@ -17,7 +17,6 @@
 import os
 import sys
 import click
-import whisper
 
 from mlhub.pkg import get_cmd_cwd
 
@@ -37,7 +36,7 @@ from mlhub.pkg import get_cmd_cwd
 @click.option("-f", "--format",
               default=None,
               type=click.STRING,
-              help="The format of the output file. e.g. txt, json, srt")
+              help="The format of the output. e.g. txt, json, srt")
 @click.option("-o", "--output",
               default=None,
               type=click.STRING,
@@ -64,16 +63,6 @@ def cli(filename, lang, output, format):
     pkg = "openai"
     cmd = "transcribe"
 
-    # -----------------------------------------------------------------------
-    # Load the required model. Just small for now.
-    # -----------------------------------------------------------------------
-
-    model = whisper.load_model("small")
-
-    # -----------------------------------------------------------------------
-    # Transcribe file or from microphone.
-    # -----------------------------------------------------------------------
-
     if not filename:
         sys.exit(f"{pkg} {cmd}: A filename is required.")
         
@@ -81,46 +70,18 @@ def cli(filename, lang, output, format):
 
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
-        
-    # fp16 not supported on CPU
-    result = model.transcribe(path, fp16=False, language=lang)
 
-    if output or format:
-        output_path = (
-            os.path.join(get_cmd_cwd(), output) if output 
-            else os.path.join(get_cmd_cwd(), 
-                              filename.replace(filename.split(".")[-1], format))
-        )
-    
-    text_buffer = [] # Buffer for accumulating segments of one sentence.
+    # Define the command we want to run using Whisper
+    command = "whisper" + filename + "--model small"
 
-    # Process and output the text ensuring one sentence per line.
-    for segment in result["segments"]:
-        text_buffer.append(segment["text"].strip())
-        
-        if segment["text"].strip()[-1] in [".", "?", "!", "。", "？", "！"]:
-            # Reached the end of a sentence.
-            full_sentence = " ".join(text_buffer)
-            
-            if output or format:
-                with open(output_path, "a", encoding="utf-8") as f:
-                    f.write(full_sentence + "\n")
-            else:
-                print(full_sentence)
-            
-            text_buffer = []
-    
-    # Handle the remaining text in the buffer.
-    if text_buffer:
-        trailing_text = " ".join(text_buffer)
-        if output or format:
-            with open(output_path, "a", encoding="utf-8") as f:
-                f.write(trailing_text + "\n")
-        else:
-            print(trailing_text)
-    
-    if output or format:
-        print("Transcribed text saved to", output_path)
+    # Use os.system to execute the command
+    status = os.system(command)
+
+    # Check if the command was executed successfully
+    if status == 0:
+        print("Command executed successfully!")
+    else:
+        print("Command execution failed!")
 
 if __name__ == "__main__":
     cli(prog_name="transcribe")
