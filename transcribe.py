@@ -2,7 +2,7 @@
 #
 # MLHub toolket for OpenAI - Transcribe
 #
-# Time-stamp: 
+# Time-stamp: <Sunday 2023-11-26 14:06:57 +1100 Graham Williams>
 #
 # Author: Graham.Williams@togaware.com, Ting Tang
 # Licensed under GPLv3.
@@ -17,8 +17,10 @@
 import os
 import sys
 import click
+import whisper
 
 from mlhub.pkg import get_cmd_cwd
+from output_handler import OutputHandler
 
 # -----------------------------------------------------------------------
 # Command line argument and options
@@ -42,7 +44,7 @@ from mlhub.pkg import get_cmd_cwd
               type=click.STRING,
               help="The name and format of the output file. e.g. output.txt")
 
-def cli(filename, lang, output, format):
+def cli(filename, lang, format, output):
     """
     Transcribe audio from a file.
 
@@ -53,15 +55,26 @@ def cli(filename, lang, output, format):
 
     Use the `-l` or `--lang` option to specify the language of the source audio.
 
+    Use the `-f` or `--format` option to specify the desired output format
+    (e.g. `txt`).
+
     To save the transcribed text to a file, 
-    use the `-o` or `--output` option to specify the desired output file name and 
-    format (e.g. `output.txt`), 
-    or use the `-f` or `--format` option to specify the desired output file format
-    (e.g. `txt`) while the file name will be the same as input audio file name.
+    use the `-o` or `--output` option to specify the desired output file name 
+    and format (e.g. `output.txt`), 
 
     """
     pkg = "openai"
     cmd = "transcribe"
+
+    # -----------------------------------------------------------------------
+    # Load the required model. Just small for now.
+    # -----------------------------------------------------------------------
+
+    model = whisper.load_model("small")
+
+    # -----------------------------------------------------------------------
+    # Transcribe file or from microphone.
+    # -----------------------------------------------------------------------
 
     if not filename:
         sys.exit(f"{pkg} {cmd}: A filename is required.")
@@ -70,18 +83,31 @@ def cli(filename, lang, output, format):
 
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
+        
+    # fp16 not supported on CPU
+    result = model.transcribe(path, fp16=False, language=lang)
 
-    # Define the command we want to run using Whisper
-    command = "whisper " + filename + " --model small"
+    text_buffer = [] # Buffer for accumulating segments of one sentence.
 
-    # Use os.system to execute the command
-    status = os.system(command)
-
-    # Check if the command was executed successfully
-    if status == 0:
-        print("Command executed successfully!")
-    else:
-        print("Command execution failed!")
-
+    if format or output:
+        output_handler = OutputHandler(format, output_path=os.path.join(get_cmd_cwd(), output) if output else None)
+        output_handler.write(result)
+    else: 
+        # If no format or output is specified, 
+        # print the text to the console as one sentence per line.
+        for segment in result["segments"]:
+            text_buffer.append(segment["text"].strip())
+            
+            if segment["text"].strip()[-1] in [".", "?", "!", "。", "？", "！"]:
+                # Reached the end of a sentence.
+                full_sentence = " ".join(text_buffer)
+                print(full_sentence)
+                text_buffer = []
+        
+        # Handle the remaining text in the buffer.
+        if text_buffer:
+            trailing_text = " ".join(text_buffer)
+            print(trailing_text)
+    
 if __name__ == "__main__":
     cli(prog_name="transcribe")
