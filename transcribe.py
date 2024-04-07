@@ -20,7 +20,7 @@ import click
 import whisper
 
 from mlhub.pkg import get_cmd_cwd
-from output_handler import OutputHandler
+from .output_handler import OutputHandler
 
 # -----------------------------------------------------------------------
 # Command line argument and options
