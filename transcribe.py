@@ -25,6 +25,8 @@ from mlhub.pkg import get_cmd_cwd
 
 # -----------------------------------------------------------------------
 # Helper functions
+# Copied and modified based on functions from OpenAI's whisper package,
+# https://github.com/openai/whisper/blob/main/whisper/utils.py
 # -----------------------------------------------------------------------
 
 # Utility function to format timestamps
@@ -35,7 +37,8 @@ def format_timestamp(seconds: float, format_type: str = "srt"):
     if format_type == "srt":
         return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02},{milliseconds:03d}"
     elif format_type == "vtt":
-        return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}.{milliseconds:03d}"
+        hours_marker = f"{hours:02d}:" if hours > 0 else ""
+        return f"{hours_marker}{int(minutes):02}:{int(seconds):02}.{milliseconds:03d}"
 
 # Output Handler Class
 class OutputHandler:
@@ -45,29 +48,30 @@ class OutputHandler:
 
     def _output_txt(self, result, file):
         for segment in result["segments"]:
-            print(segment["text"].strip(), file=file)
+            print(segment["text"].strip(), file=file, flush=True)
 
     def _output_json(self, result, file):
-        json.dump(result, file, indent=4)
+        json.dump(result, file, indent=2)
 
     def _output_srt(self, result, file):
         for i, segment in enumerate(result["segments"], start=1):
             start = format_timestamp(segment["start"], "srt")
             end = format_timestamp(segment["end"], "srt")
-            print(f"{i}\n{start} --> {end}\n{segment['text'].strip()}\n", file=file)
+            print(f"{i}\n{start} --> {end}\n{segment['text'].strip()}\n", file=file, flush=True)
 
     def _output_vtt(self, result, file):
-        print("WEBVTT\nKind: captions\nLanguage: en\n", file=file)
+        print("WEBVTT\n", file=file)
         for segment in result["segments"]:
             start = format_timestamp(segment["start"], "vtt")
             end = format_timestamp(segment["end"], "vtt")
-            print(f"{start} --> {end}\n{segment['text'].strip()}\n", file=file)
+            print(f"{start} --> {end}\n{segment['text'].strip()}\n", file=file, flush=True)
 
     def _output_tsv(self, result, file):
+        print("start", "end", "text", sep="\t", file=file)
         for segment in result["segments"]:
-            start_ms = int(segment["start"] * 1000)
-            end_ms = int(segment["end"] * 1000)
-            print(f"{start_ms}\t{end_ms}\t{segment['text'].strip()}", file=file)
+            print(round(1000 * segment["start"]), file=file, end="\t")
+            print(round(1000 * segment["end"]), file=file, end="\t")
+            print(segment["text"].strip().replace("\t", " "), file=file, flush=True)
 
     def write(self, result):
         # Dynamically select the appropriate output method.
@@ -103,11 +107,11 @@ class OutputHandler:
 @click.option("-f", "--format",
               default=None,
               type=click.STRING,
-              help="The format of the output. e.g. txt, json, srt")
+              help="The format of the output. Supported formats are txt, json, srt, tsv, and vtt.")
 @click.option("-o", "--output",
               default=None,
               type=click.STRING,
-              help="The name and format of the output file. e.g. output.txt")
+              help="The name and format of the output file. e.g. output.txt, tmp.vtt")
 
 def cli(filename, lang, format, output):
     """
@@ -120,12 +124,13 @@ def cli(filename, lang, format, output):
 
     Use the `-l` or `--lang` option to specify the language of the source audio.
 
-    Use the `-f` or `--format` option to specify the desired output format
-    (e.g. `txt`).
+    Use the `-f` or `--format` option to specify the desired output format. 
+    Supported formats are txt, json, srt, tsv, and vtt.
+    (e.g. `-f txt`).
 
     To save the transcribed text to a file, 
-    use the `-o` or `--output` option to specify the desired output file name 
-    and format (e.g. `output.txt`), 
+    Use the `-o` or `--output` option to specify the desired output file name 
+    and format (e.g. `-o output.txt`), 
 
     """
     pkg = "openai"
