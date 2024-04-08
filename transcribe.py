@@ -70,11 +70,20 @@ class OutputHandler:
             print(f"{start_ms}\t{end_ms}\t{segment['text'].strip()}", file=file)
 
     def write(self, result):
+        # Dynamically select the appropriate output method.
+        # If a method for the specified format does not exist, default to txt.
         output_func = getattr(self, f"_output_{self.format}", self._output_txt)
+
         if self.output_path:
-            with open(self.output_path, "w", encoding="utf-8") as f:
-                output_func(result, f)
-            print(f"Transcribed text saved to {self.output_path}")
+            if os.path.exists(self.output_path):
+                # File exists, write an error message and exit with status 1
+                print(f"Error: File '{self.output_path}' already exists.", file=sys.stderr)
+                sys.exit(1)
+            else: # File does not exist
+                with open(self.output_path, "w", encoding="utf-8") as f:
+                    output_func(result, f)
+                print(f"Transcribed text saved to {self.output_path}", file=sys.stderr)
+                sys.exit(0)
         else:
             output_func(result, sys.stdout)
 
@@ -146,7 +155,9 @@ def cli(filename, lang, format, output):
     text_buffer = [] # Buffer for accumulating segments of one sentence.
 
     if format or output:
-        output_handler = OutputHandler(format, output_path=os.path.join(get_cmd_cwd(), output) if output else None)
+        output_format = format if format else output.split(".")[-1]
+        output_path = os.path.join(get_cmd_cwd(), output) if output else None
+        output_handler = OutputHandler(output_format, output_path)
         output_handler.write(result)
     else: 
         # If no format or output is specified, 
