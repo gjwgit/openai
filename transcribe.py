@@ -31,10 +31,17 @@ from mlhub.pkg import get_cmd_cwd
 
 # Utility function to format timestamps
 def format_timestamp(seconds: float, format_type: str = "srt"):
-    milliseconds_total = round(seconds * 1000.0)
-    hours, remainder = divmod(milliseconds_total, 3600000)
-    minutes, remainder = divmod(remainder, 60000)
-    seconds, milliseconds = divmod(remainder, 1000)
+    milliseconds = round(seconds * 1000.0)
+
+    hours = milliseconds // 3_600_000
+    milliseconds -= hours * 3_600_000
+
+    minutes = milliseconds // 60_000
+    milliseconds -= minutes * 60_000
+
+    seconds = milliseconds // 1_000
+    milliseconds -= seconds * 1_000
+
     if format_type == "srt":
         return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02},{milliseconds:03d}"
     elif format_type == "vtt":
