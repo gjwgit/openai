@@ -52,19 +52,20 @@ This will speed up the transcribe/translate process.
 See [tokenizer.py](https://github.com/openai/whisper/blob/main/whisper/tokenizer.py) 
 for the list of all available languages.
 
-* `-f`, `--format`: Specify the output file format.   
-For example, `-f txt` will save the output text to a file with the same filename 
-as the source audio and in the txt format in the same directory.
+* `-f`, `--format`: Specify the output format.  
+Supported formats are **txt, json, srt, tsv, and vtt**. Read more about formatting on 
+[MLHub Survival Guide](https://survivor.togaware.com/mlhub/openai-transcribe-output-formats.html).  
+For example, `-f json` will format the output text to the json format.
 
 * `-o`, `--output`: Specify the output file name and format.  
-For example, `-o output.txt` will save the output text to a file named 
-`output.txt` in the same directory.
+For example, `-o output.txt` will save the output text as the txt format to a 
+file named `output.txt` in the same directory.
 
-*Without '-f' or '-o', then by default, the output text will be printed out in the terminal.*
+*Without `-o`, then by default, the output text will be printed in the console.*
 
 Format:  
-`ml transcribe openai [-l LANGUAGE] [-f OUTPUT_FILE_FORMAT] [FILENAME]`  
-`ml translate openai [-l LANGUAGE] [-o OUTPUT_FILE] [FILENAME]`
+`ml transcribe openai [-l LANGUAGE] [-f FORMAT] [FILENAME]`  
+`ml translate openai [-l LANGUAGE] [-o OUTPUT_FILENAME_AND_FORMAT] [FILENAME]`
 
 Examples:
 ```bash
