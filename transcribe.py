@@ -165,14 +165,14 @@ def cli(filename, lang, format, output):
     # fp16 not supported on CPU
     result = model.transcribe(path, fp16=False, language=lang)
 
-    text_buffer = [] # Buffer for accumulating segments of one sentence.
-
     if format or output:
         output_format = format if format else output.split(".")[-1]
         output_path = os.path.join(get_cmd_cwd(), output) if output else None
         output_handler = OutputHandler(output_format, output_path)
         output_handler.write(result)
     else: 
+        text_buffer = [] # Buffer for accumulating segments of one sentence.
+        
         # If no format or output is specified, 
         # print the text to the console as one sentence per line.
         for segment in result["segments"]:
