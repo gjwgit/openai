@@ -17,6 +17,7 @@ dependencies:
     - README.md
     - configure.sh
     - identify.py
+    - output_handler.py
     - transcribe.py
     - translate.py
 commands:
