@@ -157,16 +157,17 @@ def cli(filename, lang, format, output):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
 
     # Check if the output file already exists
-    if output and os.path.exists(output):
-        sys.exit(f"{pkg} {cmd}: File already exists: {output}")
+    if output:
+        output_path = os.path.join(get_cmd_cwd(), output)
+        if os.path.exists(output_path):
+            sys.exit(f"{pkg} {cmd}: Output file already exists: {output}")
         
     # fp16 not supported on CPU
     result = model.transcribe(path, fp16=False, language=lang)
 
     if format or output:
         output_format = format if format else output.split(".")[-1]
-        output_path = os.path.join(get_cmd_cwd(), output) if output else None
-        output_handler = OutputHandler(output_format, output_path)
+        output_handler = OutputHandler(output_format, output_path if output else None)
         output_handler.write(result)
     else: 
         text_buffer = [] # Buffer for accumulating segments of one sentence.

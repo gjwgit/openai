@@ -157,15 +157,16 @@ def cli(filename, lang, output, format):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
 
     # Check if the output file already exists
-    if output and os.path.exists(output):
-        sys.exit(f"{pkg} {cmd}: File already exists: {output}")
+    if output:
+        output_path = os.path.join(get_cmd_cwd(), output)
+        if os.path.exists(output_path):
+            sys.exit(f"{pkg} {cmd}: Output file already exists: {output}")
         
     result = model.transcribe(path, fp16=False, task="translate", language=lang)
 
     if format or output:
         output_format = format if format else output.split(".")[-1]
-        output_path = os.path.join(get_cmd_cwd(), output) if output else None
-        output_handler = OutputHandler(output_format, output_path)
+        output_handler = OutputHandler(output_format, output_path if output else None)
         output_handler.write(result)
     else: 
         text_buffer = [] # Buffer for accumulating segments of one sentence.
