@@ -86,15 +86,9 @@ class OutputHandler:
         output_func = getattr(self, f"_output_{self.format}", self._output_txt)
 
         if self.output_path:
-            if os.path.exists(self.output_path):
-                # File exists, write an error message and exit with status 1
-                print(f"Error: File '{self.output_path}' already exists.", file=sys.stderr)
-                sys.exit(1)
-            else: # File does not exist
-                with open(self.output_path, "w", encoding="utf-8") as f:
-                    output_func(result, f)
-                print(f"Transcribed text saved to {self.output_path}", file=sys.stderr)
-                sys.exit(0)
+            with open(self.output_path, "w", encoding="utf-8") as f:
+                output_func(result, f)
+            print(f"Translated text saved to {self.output_path}", file=sys.stderr)
         else:
             output_func(result, sys.stdout)
 
@@ -161,6 +155,10 @@ def cli(filename, lang, output, format):
 
     if not os.path.exists(path):
         sys.exit(f"{pkg} {cmd}: File not found: {path}")
+
+    # Check if the output file already exists
+    if output and os.path.exists(output):
+        sys.exit(f"{pkg} {cmd}: File already exists: {output}")
         
     result = model.transcribe(path, fp16=False, task="translate", language=lang)
 

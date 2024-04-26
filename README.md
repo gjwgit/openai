@@ -72,4 +72,3 @@ Examples:
 ml transcribe openai -l en -f txt myspeech.wav 
 ml translate openai --output jokowi.srt --lang id jokowi.wav
 ```
-
