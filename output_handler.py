@@ -1,8 +1,20 @@
+# -*- coding: utf-8 -*-
+#
+# MLHub toolkit for OpenAI - Output Handler for transcribe and translate tasks
+#
+# Time-stamp:
+#
+# Author: Ting Tang
+# Licensed under GPLv3.
+# Copyright (c) Togaware Pty Ltd. All rights reserved.
+
 import json
 import sys
 
 # -----------------------------------------------------------------------
-# Helper functions
+# Helper functions for formatting the output and writing them out to 
+# correct locations.
+
 # Copied and modified based on functions from OpenAI's whisper package,
 # https://github.com/openai/whisper/blob/main/whisper/utils.py
 # -----------------------------------------------------------------------

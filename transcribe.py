@@ -15,12 +15,7 @@
 # ----------------------------------------------------------------------
 
 import click
-import os
-import sys
-import whisper
-
-from mlhub.pkg import get_cmd_cwd
-from output_handler import OutputHandler
+from audio_processing import process_audio
 
 # -----------------------------------------------------------------------
 # Command line argument and options
@@ -48,7 +43,7 @@ def cli(filename, lang, format, output):
     """
     Transcribe audio from a file.
 
-    Tested with wav, mp4, mov.
+    Tested with mp3, wav, mp4, mov.
 
     The audio is processed locally using a downloaded OpenAI model The
     result is returned as text.
@@ -64,58 +59,8 @@ def cli(filename, lang, format, output):
     and format (e.g. `-o output.txt`), 
 
     """
-    pkg = "openai"
-    cmd = "transcribe"
+    process_audio(filename, lang, format, output, task="transcribe")
 
-    # -----------------------------------------------------------------------
-    # Load the required model. Just small for now.
-    # -----------------------------------------------------------------------
-
-    model = whisper.load_model("small")
-
-    # -----------------------------------------------------------------------
-    # Transcribe file or from microphone.
-    # -----------------------------------------------------------------------
-
-    if not filename:
-        sys.exit(f"{pkg} {cmd}: A filename is required.")
-        
-    path = os.path.join(get_cmd_cwd(), filename)
-
-    if not os.path.exists(path):
-        sys.exit(f"{pkg} {cmd}: File not found: {path}")
-
-    # Check if the output file already exists
-    if output:
-        output_path = os.path.join(get_cmd_cwd(), output)
-        if os.path.exists(output_path):
-            sys.exit(f"{pkg} {cmd}: Output file already exists: {output}")
-
-    # fp16 not supported on CPU
-    result = model.transcribe(path, fp16=False, language=lang)
-
-    if format or output:
-        output_format = format if format else output.split(".")[-1]
-        output_handler = OutputHandler(output_format, output_path if output else None)
-        output_handler.write(result)
-    else: 
-        text_buffer = [] # Buffer for accumulating segments of one sentence.
-        
-        # If no format or output is specified, 
-        # print the text to the console as one sentence per line.
-        for segment in result["segments"]:
-            text_buffer.append(segment["text"].strip())
-            
-            if segment["text"].strip()[-1] in [".", "?", "!", "。", "？", "！"]:
-                # Reached the end of a sentence.
-                full_sentence = " ".join(text_buffer)
-                print(full_sentence)
-                text_buffer = []
-        
-        # Handle the remaining text in the buffer.
-        if text_buffer:
-            trailing_text = " ".join(text_buffer)
-            print(trailing_text)
     
 if __name__ == "__main__":
     cli(prog_name="transcribe")

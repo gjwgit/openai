@@ -16,6 +16,7 @@ dependencies:
   files:
     - README.md
     - configure.sh
+    - audio_processing.py
     - identify.py
     - output_handler.py
     - transcribe.py
