@@ -14,13 +14,13 @@
 # Setup
 # ----------------------------------------------------------------------
 
+import click
 import os
 import sys
-import click
 import whisper
-import json
 
 from mlhub.pkg import get_cmd_cwd
+from shlex import quote
 from output_handler import OutputHandler
 
 # -----------------------------------------------------------------------
@@ -93,7 +93,9 @@ def cli(filename, lang, output, format):
         if os.path.exists(output_path):
             sys.exit(f"{pkg} {cmd}: Output file already exists: {output}")
         
-    result = model.transcribe(path, fp16=False, task="translate", language=lang)
+    # Quote the path to avoid not recognizing the file path with spaces.
+    input_path = quote(path) 
+    result = model.transcribe(input_path, fp16=False, task="translate", language=lang)
 
     if format or output:
         output_format = format if format else output.split(".")[-1]
