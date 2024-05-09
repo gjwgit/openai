@@ -16,6 +16,24 @@
 
 import click
 from audio_processing import process_audio
+from identify import LANGUAGES
+
+# language code lookup by name, with a few language aliases
+TO_LANGUAGE_CODE = {
+    **{language: code for code, language in LANGUAGES.items()},
+    "burmese": "my",
+    "valencian": "ca",
+    "flemish": "nl",
+    "haitian": "ht",
+    "letzeburgesch": "lb",
+    "pushto": "ps",
+    "panjabi": "pa",
+    "moldavian": "ro",
+    "moldovan": "ro",
+    "sinhalese": "si",
+    "castilian": "es",
+    "mandarin": "zh",
+}
 
 # -----------------------------------------------------------------------
 # Command line argument and options
@@ -28,11 +46,11 @@ from audio_processing import process_audio
                 type=click.STRING)
 @click.option("-l", "--lang",
               default=None,
-              type=click.STRING,
+              type=click.Choice(sorted(LANGUAGES.keys()) + sorted([k.title() for k in TO_LANGUAGE_CODE.keys()]), case_sensitive=True),
               help="The language of the source audio.")
 @click.option("-f", "--format",
               default=None,
-              type=click.STRING,
+              type=click.Choice(["txt", "vtt", "srt", "tsv", "json"], case_sensitive=True),
               help="The format of the output. Supported formats are txt, json, srt, tsv, and vtt.")
 @click.option("-o", "--output",
               default=None,

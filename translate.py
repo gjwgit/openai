@@ -16,6 +16,8 @@
 
 import click
 from audio_processing import process_audio
+from identify import LANGUAGES
+from transcribe import TO_LANGUAGE_CODE
 
 # -----------------------------------------------------------------------
 # Command line argument and options
@@ -28,11 +30,11 @@ from audio_processing import process_audio
                 type=click.STRING)
 @click.option("-l", "--lang",
               default=None,
-              type=click.STRING,
+              type=click.Choice(sorted(LANGUAGES.keys()) + sorted([k.title() for k in TO_LANGUAGE_CODE.keys()]), case_sensitive=True),
               help="The language of the source audio.")
 @click.option("-f", "--format",
               default=None,
-              type=click.STRING,
+              type=click.Choice(["txt", "vtt", "srt", "tsv", "json"], case_sensitive=True),
               help="The format of the output. Supported formats are txt, json, srt, tsv, and vtt.")
 @click.option("-o", "--output",
               default=None,
