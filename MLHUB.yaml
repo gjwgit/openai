@@ -3,7 +3,7 @@ meta:
   name         : openai
   title        : Open AI packages, including whisper for speech transcription
   keywords     : python, speech, transcription
-  version      : 0.0.3
+  version      : 0.0.4
   languages    : py
   license      : gpl3
   author       : Graham.Williams@togaware.com
@@ -23,6 +23,7 @@ dependencies:
     - transcribe.py
     - translate.py
 commands:
+  supported: List out all supported languages for transcribing and translation to English.
   identify: Identify the language of the audio file.
   transcribe : Convert an audio file into text.
   translate : Translate audio from a file into English text.

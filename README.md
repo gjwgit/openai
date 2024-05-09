@@ -22,6 +22,7 @@ Survival Guide](https://survivor.togaware.com/mlhub/openai.html) for details.
   ```
 * Command line tools
   ```bash
+  ml supported openai --iso
   ml identify openai myspeech.wav
   ml transcribe openai myspeech.wav
   ml translate openai myspeech.wav
@@ -45,7 +46,7 @@ to see
   A zestful food is the hot cross bun.
   ```
 
-## Options
+## Options for transcribe/translate
 
 * `-l`, `--lang`: Specify the language of the source audio.  
 This will speed up the transcribe/translate process.  
