@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# MLHub toolket for OpenAI - Identify
+# MLHub toolket for OpenAI - Identify the language of a media file.
 #
 # Time-stamp:
 #

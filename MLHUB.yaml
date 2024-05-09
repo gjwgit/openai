@@ -19,6 +19,7 @@ dependencies:
     - audio_processing.py
     - identify.py
     - output_handler.py
+    - supported.py
     - transcribe.py
     - translate.py
 commands:
