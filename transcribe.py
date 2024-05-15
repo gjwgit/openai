@@ -16,24 +16,8 @@
 
 import click
 from audio_processing import process_audio
-from identify import LANGUAGES
-
-# language code lookup by name, with a few language aliases
-TO_LANGUAGE_CODE = {
-    **{language: code for code, language in LANGUAGES.items()},
-    "burmese": "my",
-    "valencian": "ca",
-    "flemish": "nl",
-    "haitian": "ht",
-    "letzeburgesch": "lb",
-    "pushto": "ps",
-    "panjabi": "pa",
-    "moldavian": "ro",
-    "moldovan": "ro",
-    "sinhalese": "si",
-    "castilian": "es",
-    "mandarin": "zh",
-}
+from whisper.tokenizer import LANGUAGES
+from whisper.tokenizer import TO_LANGUAGE_CODE
 
 # -----------------------------------------------------------------------
 # Command line argument and options

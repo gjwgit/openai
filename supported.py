@@ -15,134 +15,8 @@
 # ----------------------------------------------------------------------
 import click
 
-languages = """
-Afrikaans
-Albanian
-Amharic
-Arabic
-Armenian
-Assamese
-Azerbaijani
-Bashkir
-Basque
-Belarusian
-Bengali
-Bosnian
-Breton
-Bulgarian
-Cantonese
-Catalan
-Chinese
-Croatian
-Czech
-Danish
-Dutch
-English
-Estonian
-Faroese
-Finnish
-French
-Galician
-Georgian
-German
-Greek
-Gujarati
-Haitian creole
-Hausa
-Hawaiian
-Hebrew
-Hindi
-Hungarian
-Icelandic
-Indonesian
-Italian
-Japanese
-Javanese
-Kannada
-Kazakh
-Khmer
-Korean
-Lao
-Latin
-Latvian
-Lingala
-Lithuanian
-Luxembourgish
-Macedonian
-Malagasy
-Malay
-Malayalam
-Maltese
-Maori
-Marathi
-Mongolian
-Myanmar
-Nepali
-Norwegian
-Nynorsk
-Occitan
-Pashto
-Persian
-Polish
-Portuguese
-Punjabi
-Romanian
-Russian
-Sanskrit
-Serbian
-Shona
-Sindhi
-Sinhala
-Slovak
-Slovenian
-Somali
-Spanish
-Sundanese
-Swahili
-Swedish
-Tagalog
-Tajik
-Tamil
-Tatar
-Telugu
-Thai
-Tibetan
-Turkish
-Turkmen
-Ukrainian
-Urdu
-Uzbek
-Vietnamese
-Welsh
-Yiddish
-Yoruba
-"""
-
-iso_codes = """
-af,am,ar,as,az,
-ba,be,bg,bn,bo,br,bs,
-ca,cs,cy,
-da,de,
-el,en,es,et,eu,
-fa,fi,fo,fr,
-gl,gu,
-ha,haw,he,hi,hr,ht,hu,hy,
-id,is,it,
-ja,jw,
-ka,kk,km,kn,ko,
-la,lb,ln,lo,lt,lv,
-mg,mi,mk,ml,mn,mr,ms,mt,my,
-ne,nl,nn,no,
-oc,
-pa,pl,ps,pt,
-ro,ru,
-sa,sd,si,sk,sl,sn,so,sq,sr,su,sv,sw,
-ta,te,tg,th,tk,tl,tr,tt,
-uk,ur,uz,
-vi,
-yi,yo,yue,
-zh
-"""
+from itertools import groupby
+from whisper.tokenizer import LANGUAGES
 
 # -----------------------------------------------------------------------
 # Command line argument and options
@@ -155,9 +29,13 @@ zh
 
 def cli(iso):
     if iso:
-        print(iso_codes.strip())
+        language_codes = sorted(LANGUAGES.keys())
+        for group in groupby(language_codes, key=lambda x: x[0]):
+            print(",".join(group) + ",")
     else:
-        print(languages.strip())
+        capitalized_languages = sorted([value.capitalize() for value in LANGUAGES.values()])
+        for language in capitalized_languages:
+            print(language)
 
 if __name__ == "__main__":
     cli(prog_name="supported")

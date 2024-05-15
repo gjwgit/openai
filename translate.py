@@ -16,8 +16,8 @@
 
 import click
 from audio_processing import process_audio
-from identify import LANGUAGES
-from transcribe import TO_LANGUAGE_CODE
+from whisper.tokenizer import LANGUAGES
+from whisper.tokenizer import TO_LANGUAGE_CODE
 
 # -----------------------------------------------------------------------
 # Command line argument and options
