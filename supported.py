@@ -30,8 +30,14 @@ from whisper.tokenizer import LANGUAGES
 def cli(iso):
     if iso:
         language_codes = sorted(LANGUAGES.keys())
-        for group in groupby(language_codes, key=lambda x: x[0]):
-            print(",".join(group) + ",")
+        grouped = list(groupby(language_codes, key=lambda x: x[0]))
+        total_groups = len(grouped)
+        
+        for index, (_, group) in enumerate(grouped):
+            if index == total_groups - 1:  # Check if it's the last group
+                print(",".join(group))  # Print without trailing comma
+            else:
+                print(",".join(group) + ",")  # Print with trailing comma
     else:
         capitalized_languages = sorted([value.capitalize() for value in LANGUAGES.values()])
         for language in capitalized_languages:
